@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
 
 # Create your views here.
 def post_list(request):
@@ -58,6 +59,3 @@ def post_remove(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     post.delete()
     return redirect('blog.views.post_list')
-
-def custom404(request):
-    return render(request, '404error.html')

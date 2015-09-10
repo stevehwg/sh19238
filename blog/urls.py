@@ -11,4 +11,3 @@ urlpatterns = [
     url(r'^post/(?P<post_id>[0-9]+)/remove/$', views.post_remove, name='post_remove'),
 ]
 
-handler404 ="blog.views.custom404"
