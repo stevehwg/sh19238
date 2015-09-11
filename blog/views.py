@@ -1,9 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
 
 # Create your views here.
 def post_list(request):
@@ -63,7 +62,7 @@ def post_remove(request, post_id):
 def add_comment_to_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.method=="POST":
-        form=CommentForm(request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
@@ -74,14 +73,13 @@ def add_comment_to_post(request, post_id):
     return render(request, 'blog/add_comment_to_post.html', {'form':form})
 
 @login_required
-def comment_approval(request, post_id):
-    comment = get_object_or_404(request, pk=post_id)
+def comment_approve(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
-    return redirect('blog.views.post_detail', post_id=comment.post.pk)
+    return redirect('blog.views.post_detail', post_id=comment.post.pk) #using post_id from Post model
 
 @login_required
-def comment_removal(request, post_id):
-    comment = get_object_or_404(request, pk=post_id)
-    post_pk =comment.post.pk
-    comment.removal()
-    return redirect('blog.views.post_detail', post_id=post_pk)
+def comment_remove(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('blog.views.post_detail', post_id=comment.post.pk)
