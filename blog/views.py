@@ -73,13 +73,13 @@ def add_comment_to_post(request, post_id):
     return render(request, 'blog/add_comment_to_post.html', {'form':form})
 
 @login_required
-def comment_approve(request, pk):
+def comment_approval(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('blog.views.post_detail', post_id=comment.post.pk) #using post_id from Post model
 
 @login_required
-def comment_remove(request, pk):
+def comment_removal(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('blog.views.post_detail', post_id=comment.post.pk)
